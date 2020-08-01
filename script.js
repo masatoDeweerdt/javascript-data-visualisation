@@ -1,7 +1,9 @@
-document.getElementById("table1").insertAdjacentHTML("beforebegin", '<canvas id="canvas1" height="400" width="400"></canvas>');
-let canvas1 = document.getElementById ("canvas1");
+document.getElementById("table1").insertAdjacentHTML("beforebegin", '<canvas id="canvas1" height="400" width="400"></canvas>'); //placing canvas1
+document.getElementById("table2").insertAdjacentHTML("beforebegin", '<canvas id="canvas2" height="400" width="400"></canvas>'); //placing canvas2
+let canvas1 = document.getElementById("canvas1");
+let canvas2 = document.getElementById("canvas2")
 
-// Extraction de donnée table
+// Extraction des données du tableau 1
 
 let table = document.getElementById('table1');
 
@@ -19,8 +21,10 @@ function tableJson(table) {
 }
 
 table = tableJson(table);
+table2 = tableJson(table2);
 
 console.log(table);
+console.log(table2);
 
 //Supprimer l'index 0
 
@@ -53,25 +57,7 @@ function randomColor() {
 
 console.log(randomColor());
 
-// var ctx = document.getElementById('canvas1').getContext('2d');
-// var chart = new Chart(ctx, {
-//     // The type of chart we want to create
-//     type: 'line',
-
-//     // The data for our dataset
-//     data: {
-//         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//         datasets: [{
-//             label: 'My First dataset',
-//             backgroundColor: 'rgb(255, 99, 132)',
-//             borderColor: 'rgb(255, 99, 132)',
-//             data: [0, 10, 5, 2, 20, 30, 45]
-//         }]
-//     },
-
-//     // Configuration options go here
-//     options: {}
-// });
+    //Implement graph1
     
     let myChart1 = new Chart(canvas1, {
     //The type of chart we want to create
@@ -290,15 +276,8 @@ console.log(randomColor());
             borderColor: randomColor(),
             fill: false
           },
-        //   { 
-        //     data: arrayStringToFloat(arrayWithoutElementAtIndex(table[36], 0)),
-        //     label: table[36][0],
-        //     borderColor: randomColor(),
-        //     fill: false
-        //   },
       ]
     },
-
     // Configuration options go here
     options: {
       title: {
@@ -306,4 +285,57 @@ console.log(randomColor());
         text: 'World population per region (in millions)'
       }
     }
-});    
+});
+
+// Creating 3 functions to split the table2 json to 3 arrays
+
+function arrayCountries(arr) {
+  let data = [];
+  for(i = 0; i < arr.length ; i++) {
+    data[i] = arr[i][0];
+  }
+  data[7] = "England and Wales(UK)"
+  return data;
+}
+
+function tableDataOne(arr) {
+  let data = [];
+  for(i = 0 ; i < arr.length; i++) {
+    data[i] = arr[i][1];
+  }
+  return data;
+}
+
+function tableDataTwo(arr) {
+  let data = [];
+  for(i = 0; i < arr.length; i++) {
+    data[i] = arr[i][2];
+  }
+  return data;
+}
+
+//Implement chart 2
+
+let chart2 = new Chart(canvas2, {
+  type: 'bar',
+  data: {
+    labels: arrayCountries(table2),
+    datasets: [
+      {
+        label: "2007-2009",
+        backgroundColor: "#3e95cd",
+        data: tableDataOne(table2)
+      }, {
+        label: "2010-2012",
+        backgroundColor: "#8e5ea2",
+        data: tableDataTwo(table2)
+      }
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Prison population, average per year, 2007-09 and 2010-12 (per 100,000 inhabitants)'
+    }
+  }
+});
