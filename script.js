@@ -1,7 +1,9 @@
 document.getElementById("table1").insertAdjacentHTML("beforebegin", '<canvas id="canvas1" height="400" width="400"></canvas>'); //placing canvas1
 document.getElementById("table2").insertAdjacentHTML("beforebegin", '<canvas id="canvas2" height="300" width="400"></canvas>'); //placing canvas2
+document.getElementById("firstHeading").insertAdjacentHTML("beforebegin", '<canvas id="canvas3" height="300" width="400"></canvas>');
 let canvas1 = document.getElementById("canvas1");
-let canvas2 = document.getElementById("canvas2")
+let canvas2 = document.getElementById("canvas2");
+let canvas3 = document.getElementById("canvas3");
 
 // Extraction des données du tableau 1
 
@@ -377,7 +379,7 @@ getData();
 
 let timerData1 = setInterval(() => getData(), 1000); // ajout d'interval en ms pour simuler le real-time
 
-let chart = new Chart(document.getElementById("line-chart2"), { // ajout du graphique en line
+let chart = new Chart(canvas3, { // ajout du graphique en line
   type: "line",
   data: {
     labels: xxs,
