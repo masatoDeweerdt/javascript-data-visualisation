@@ -1,5 +1,5 @@
 document.getElementById("table1").insertAdjacentHTML("beforebegin", '<canvas id="canvas1" height="400" width="400"></canvas>'); //placing canvas1
-document.getElementById("table2").insertAdjacentHTML("beforebegin", '<canvas id="canvas2" height="400" width="400"></canvas>'); //placing canvas2
+document.getElementById("table2").insertAdjacentHTML("beforebegin", '<canvas id="canvas2" height="300" width="400"></canvas>'); //placing canvas2
 let canvas1 = document.getElementById("canvas1");
 let canvas2 = document.getElementById("canvas2")
 
@@ -57,13 +57,13 @@ function randomColor() {
 
 console.log(randomColor());
 
-    //Implement graph1
+    //insertion du graph1
     
     let myChart1 = new Chart(canvas1, {
-    //The type of chart we want to create
+    
     type: 'line',
 
-    // The data for our dataset
+    // le Data pour le Datasets
     data: {
       labels: arrayWithoutElementAtIndex(table[0], 0),
       datasets: [{ 
@@ -278,7 +278,7 @@ console.log(randomColor());
           },
       ]
     },
-    // Configuration options go here
+    // option de config du graph
     options: {
       title: {
         display: true,
@@ -287,7 +287,7 @@ console.log(randomColor());
     }
 });
 
-// Creating 3 functions to split the table2 json to 3 arrays
+// Création de 3 fonctions pour diviser le json du table 2 en 3 arrays
 
 function arrayCountries(arr) {
   let data = [];
@@ -314,21 +314,21 @@ function tableDataTwo(arr) {
   return data;
 }
 
-//Implement chart 2
+//insertion du graph 2
 
 let chart2 = new Chart(canvas2, {
   type: 'bar',
   data: {
-    labels: arrayCountries(table2),
+    labels: arrayCountries(table2), // Array pays
     datasets: [
       {
         label: "2007-2009",
         backgroundColor: "#3e95cd",
-        data: tableDataOne(table2)
+        data: tableDataOne(table2) // Array data1
       }, {
         label: "2010-2012",
         backgroundColor: "#8e5ea2",
-        data: tableDataTwo(table2)
+        data: tableDataTwo(table2) // Array data2
       }
     ]
   },
@@ -339,3 +339,67 @@ let chart2 = new Chart(canvas2, {
     }
   }
 });
+
+const data_url = "https://canvasjs.com/services/data/datapoints.php";
+
+const xxs = []; // création array vide pour stocker le data pour l'axe x
+const yys = []; // création array vide pour stocker le data pour l'axe Y
+
+async function getData() {
+  const response = await fetch(data_url); // récupération des datapoints de l'URL
+  const data = await response.json();
+
+  console.log(data);
+
+  const xs = data.map(function (e) {
+    return parseInt(e["0"]);
+  });
+
+  console.log(xs); // récupération du data pour l'axe x (index 0 de l'array data)
+
+  for (u = 0; u < 10; u++) {
+    xxs.push(xs[u]);
+  }
+  const ys = data.map(function (e) {
+    return parseInt(e["1"]);
+  });
+
+  console.log(ys); // récupération du data pour l'axe y (index 1 de l'array data)
+
+  for (u = 0; u < 10; u++) {
+    yys.push(ys[u]);
+  }
+}
+
+console.log(yys);
+
+getData();
+
+let timerData1 = setInterval(() => getData(), 1000); // ajout d'interval en ms pour simuler le real-time
+
+let chart = new Chart(document.getElementById("line-chart2"), { // ajout du graphique en line
+  type: "line",
+  data: {
+    labels: xxs,
+    datasets: [
+      {
+        data: yys,
+        label: "dataPoints",
+        borderColor: "#3e95cd",
+        fill: false,
+      },
+    ],
+  },
+  options: {
+    title: {
+      display: true,
+      text: "Random",
+    },
+  },
+});
+
+function addData() {
+  chart.data.datasets[0].data = yys;
+  chart.update();
+}
+let timerData2 = setInterval(() => addData(), 1000);
